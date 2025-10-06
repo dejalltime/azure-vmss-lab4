@@ -99,7 +99,7 @@ To avoid unnecessary costs, delete:
 - Any associated **resource groups** or **storage resources** -->
 
 <details>
-<summary><b>1️⃣ Getting Started</b></summary>
+<summary><b>1️. Getting Started</b></summary>
 
 Azure **Virtual Machine Scale Sets (VMSS)** is a service that lets you deploy and manage a group of identical, load-balanced virtual machines.  
 It automatically scales the number of VM instances according to demand or based on rules you define.
@@ -110,21 +110,14 @@ A Scale Set includes:
 - **Autoscale rules** that control when new VMs are added or removed.
 - A **Network Security Group (NSG)** that defines allowed inbound and outbound traffic (similar to an EC2 Security Group).
 
-> 💡 Azure Monitor tracks metrics such as **CPU utilization**, and triggers the scaling logic automatically.
-
-### Lab Guidelines
-
-- Ensure you’re working in the **East US** region (or your assigned Azure region).  
-  On the Azure Portal top bar, check the region selector beside your profile.
-- Some features may show limited permissions depending on your sandbox subscription.  
-  You can safely ignore “insufficient privilege” warnings during this lab.
+> Azure Monitor tracks metrics such as **CPU utilization**, and triggers the scaling logic automatically.
 
 </details>
 
 ---
 
 <details>
-<summary><b>2️⃣ Create a Virtual Machine</b></summary>
+<summary><b>2️. Create a Virtual Machine</b></summary>
 
 In this task, we’ll create a base virtual machine that runs a **Node.js web app**.  
 Later, we’ll capture this VM as an image and use it as the base configuration for our scale set.
@@ -132,22 +125,27 @@ Later, we’ll capture this VM as an image and use it as the base configuration 
 ### Steps
 
 1. In the Azure Portal search bar, type **Virtual Machines** and select **+ Create → Azure Virtual Machine**.
-2. Configure the VM:
-   - **Resource Group:** `vmss-lab-rg`
-   - **Virtual Machine name:** `vmss-base-vm`
-   - **Region:** East US
-   - **Image:** Ubuntu 22.04 LTS
-   - **Size:** Standard B1s
+2. **Basics tab**:
+   - **Resource group:** `vmss-lab-rg`
+   - **Virtual machine name:** `vmss-base-vm`
+   - **Region:** `Canada Central`
+   - **Availability zone:** Zone 1
+   - **Image:** Ubuntu Server 22.04 LTS
+   - **Size:** `B1s` (free-tier) or `Standard_D2s_v3`
+   - **Authentication type:** SSH public key
    - **Username:** `azureuser`
-   - **Password:** create a secure one
+   - **SSH public key source:** Generate new key pair
+   - **Key pair name:** `vmss-key`
    - **Public inbound ports:** Allow SSH (22) and HTTP (3000)
-3. Under **Networking**, a new **Network Security Group (NSG)** will be created automatically.  
+   - **Download** the private key (`.pem`) when prompted — store it securely.
+3. **Disks tab**: Keep default (Standard SSD).
+4. Under **Networking**, a new **Network Security Group (NSG)** will be created automatically.  
    Add one inbound rule:
    - **Port:** 3000
    - **Protocol:** TCP
    - **Source:** Any
    - **Description:** Allow HTTP access for Node app
-4. Click **Review + Create → Create** and wait for the deployment to finish.
+5. Click **Review + Create → Create** and wait for the deployment to finish.
 
 ### Connect and Install Node.js
 
@@ -183,7 +181,7 @@ Visit `http://<public-ip>:3000` to see the **private IP address** displayed.
 ---
 
 <details>
-<summary><b>3️⃣ Create a Custom Image (Equivalent of Launch Template)</b></summary>
+<summary><b>3️. Create a Custom Image (Equivalent of Launch Template)</b></summary>
 
 Now that our Node app runs successfully, we’ll capture this VM as a reusable image.  
 This image acts as the “Launch Template” for our Scale Set.
@@ -205,7 +203,7 @@ This image acts as the “Launch Template” for our Scale Set.
 ---
 
 <details>
-<summary><b>4️⃣ Create a Virtual Machine Scale Set (Equivalent of Auto Scaling Group)</b></summary>
+<summary><b>4️. Create a Virtual Machine Scale Set (Equivalent of Auto Scaling Group)</b></summary>
 
 Now, we’ll create a **Virtual Machine Scale Set (VMSS)** using our captured image.
 
@@ -237,7 +235,7 @@ Now, we’ll create a **Virtual Machine Scale Set (VMSS)** using our captured im
 ---
 
 <details>
-<summary><b>5️⃣ Verifying and Testing VMSS Behavior</b></summary>
+<summary><b>5️. Verifying and Testing VMSS Behavior</b></summary>
 
 We’ll now test how our VMSS behaves when:
 
@@ -266,7 +264,7 @@ sudo stress --cpu 4 --timeout 320
 ---
 
 <details>
-<summary><b>6️⃣ Clean Up</b></summary>
+<summary><b>6️. Clean Up</b></summary>
 
 After completing the lab, remove all resources to avoid charges.
 
