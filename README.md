@@ -35,23 +35,11 @@ By the end of this lab, you’ll understand how to:
 
 ## Architecture Diagram
 
-The diagram below illustrates a simple deployment of a **Virtual Machine Scale Set** behind a Load Balancer.  
+The diagram below illustrates a simple deployment of a **Virtual Machine Scale Set** behind a Load Balancer.
+
 Traffic is distributed evenly, and autoscale rules adjust the number of instances based on demand.
 
-```
-                   ┌────────────────────────┐
-                   │     Azure Load Balancer│
-                   └─────────────┬──────────┘
-                                 │
-          ┌──────────────────────┼──────────────────────┐
-          │                      │                      │
-   ┌──────────────┐       ┌──────────────┐       ┌──────────────┐
-   │ VM Instance 1│       │ VM Instance 2│  ...  │ VM Instance N│
-   └──────────────┘       └──────────────┘       └──────────────┘
-          │                      │                      │
-          └──────────────────────┴──────────────────────┘
-                      Virtual Machine Scale Set
-```
+![Azure VMSS Lab 4](./autoscale-lab4.png)
 
 ---
 
