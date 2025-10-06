@@ -222,12 +222,22 @@ Now, we’ll create a **Virtual Machine Scale Set (VMSS)** using our captured im
    - **Scale Set name:** `my-vmss`
    - **Region:** `Canada Central`
    - **Availability zone:** Select `Zone 1`, `Zone 2`, `Zone 3`
+   - **Scaling mode:** Select `Autoscaling`
+     - Click **Configure**
+   - **Edit** the **Default Condition**
+   - Set:
+     - Default instance count: 1
+     - Minimum VMs: 1
+     - Maximum VMs: 2
+     - Scale out rule: Add 1 VM when CPU > 70% for 5 minutes
+     - Scale in rule: Remove 1 VM when CPU < 20% for 10 minutes
+     - Minutes: 5
    - **Image:** select **My Images → vmss-node-image**
    - **Size:** Standard B1s
    - **Authentication type:** Password or SSH
-   - **Instance count:** 2
 3. Under **Networking**, use the same **Virtual Network** and **Subnet** created earlier.
 4. Keep the **Azure Load Balancer** option enabled (it will distribute traffic among instances).
+
    - **Select a new Load balancer:** Create a load balancer
      - Name: vmss-lab-lb
      - Type: Internal
@@ -235,16 +245,7 @@ Now, we’ll create a **Virtual Machine Scale Set (VMSS)** using our captured im
    - Load-balancing rule
      - Backend port: 3000
 
-<!-- 4. Under **Scaling**, define:
-   - **Minimum VMs:** 1
-   - **Maximum VMs:** 2
-   - **Initial (Desired) count:** 1
-   - **Scaling policy:** **Custom autoscale**
-   - **Metric:** **Average CPU percentage**
-   - **Scale out rule:** Add 1 VM when CPU > 70% for 5 minutes
-   - **Scale in rule:** Remove 1 VM when CPU < 30% for 10 minutes -->
-
-4. Click **Review + Create → Create**.
+5. Click **Review + Create → Create**.
 
 </details>
 
@@ -262,18 +263,18 @@ We’ll now test how our VMSS behaves when:
 
 1. In **Virtual Machine Scale Sets → Instances**, select an instance and click **Delete**.
 2. Wait a few minutes — VMSS automatically detects the loss and replaces it with a new healthy VM.  
-   You can verify this under the **Instances** tab or **Activity Log**.
+   You can verify this under the **Instances** tab.
 
 ### Case 2 – High CPU Load
 
 ```bash
 sudo apt install -y stress
-sudo stress --cpu 4 --timeout 320
+sudo stress --cpu 12 --timeout 320
 ```
 
 1. Go to **VMSS → Scaling → Metrics** and watch the **CPU %** graph spike.
 2. When CPU exceeds 70 %, Azure adds a new instance automatically.
-3. When load drops below 30 %, the extra instance is removed after the cooldown period.
+3. When load drops below 20 %, the extra instance is removed after the cooldown period.
 
 </details>
 
