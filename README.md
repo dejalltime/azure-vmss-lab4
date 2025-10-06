@@ -14,7 +14,7 @@ By the end of this lab, you’ll understand how to:
 
 ---
 
-## ⚙️ Technologies Used
+## Technologies Used
 
 - **Azure Virtual Machine Scale Sets (VMSS)**
 - **Azure Virtual Network (VNet)**
