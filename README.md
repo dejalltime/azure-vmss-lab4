@@ -135,22 +135,25 @@ Later, we’ll capture this VM as an image and use it as the base configuration 
    - **Authentication type:** SSH public key
    - **Username:** `azureuser`
    - **SSH public key source:** Generate new key pair
-   - **Key pair name:** `vmss-key`
-   - **Public inbound ports:** Allow SSH (22) and HTTP (3000)
+   - **Key pair name:** `vmss-base-vm_key`
+   - **Public inbound ports:** None
    - **Download** the private key (`.pem`) when prompted — store it securely.
 3. **Disks tab**: Keep default (Standard SSD).
-4. Under **Networking**, a new **Network Security Group (NSG)** will be created automatically.  
-   Add one inbound rule:
-   - **Port:** 3000
-   - **Protocol:** TCP
-   - **Source:** Any
-   - **Description:** Allow HTTP access for Node app
+4. Under **Networking**, a new **Network Security Group (NSG)** will be created automatically.
+   - NIC network security group: Advanced
+   - Configure network security group: `Create new`
+     Add one inbound rule:
+     - **Port:** 3000
+     - **Protocol:** TCP
+     - **Source:** Any
+     - **Name:** HTTP
+     - **Description:** Allow HTTP access for Node app
+   - Click `ok`
 5. Click **Review + Create → Create** and wait for the deployment to finish.
 
 ### Connect and Install Node.js
 
 ```bash
-ssh azureuser@<public-ip>
 sudo apt update
 sudo apt install -y curl
 curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
@@ -192,8 +195,12 @@ This image acts as the “Launch Template” for our Scale Set.
 2. Stop (deallocate) the VM.
 3. On the VM overview page, click **Capture**.
 4. Set:
-   - **Image name:** `vmss-node-image`
    - **Resource group:** `vmss-lab-rg`
+   - **Target VM image definition:** **Create new**
+     - **Image name:** `vmss-node-image`
+   - **Target Azure compute gallery:** **Create new**
+     - **Name:** `vmsslabgallery`
+   - **Version number:** `1.0.0`
    - Check **Automatically delete this VM after creating the image**.
 5. Click **Review + Create → Create**.  
    Once complete, you’ll see the new image under **Images**.
@@ -213,22 +220,31 @@ Now, we’ll create a **Virtual Machine Scale Set (VMSS)** using our captured im
 2. Configure:
    - **Resource group:** `vmss-lab-rg`
    - **Scale Set name:** `my-vmss`
-   - **Region:** East US
+   - **Region:** `Canada Central`
+   - **Availability zone:** Select `Zone 1`, `Zone 2`, `Zone 3`
    - **Image:** select **My Images → vmss-node-image**
    - **Size:** Standard B1s
    - **Authentication type:** Password or SSH
-   - **Instance count:** 1 (initially)
-3. Under **Networking**, use the same **Virtual Network** and **Subnet** created earlier.  
-   Keep the **Load Balancer** option enabled (it will distribute traffic among instances).
-4. Under **Scaling**, define:
+   - **Instance count:** 2
+3. Under **Networking**, use the same **Virtual Network** and **Subnet** created earlier.
+4. Keep the **Azure Load Balancer** option enabled (it will distribute traffic among instances).
+   - **Select a new Load balancer:** Create a load balancer
+     - Name: vmss-lab-lb
+     - Type: Internal
+     - Protocol (LB rule): TCP
+   - Load-balancing rule
+     - Backend port: 3000
+
+<!-- 4. Under **Scaling**, define:
    - **Minimum VMs:** 1
    - **Maximum VMs:** 2
    - **Initial (Desired) count:** 1
    - **Scaling policy:** **Custom autoscale**
    - **Metric:** **Average CPU percentage**
    - **Scale out rule:** Add 1 VM when CPU > 70% for 5 minutes
-   - **Scale in rule:** Remove 1 VM when CPU < 30% for 10 minutes
-5. Click **Review + Create → Create**.
+   - **Scale in rule:** Remove 1 VM when CPU < 30% for 10 minutes -->
+
+4. Click **Review + Create → Create**.
 
 </details>
 
