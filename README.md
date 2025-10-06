@@ -99,7 +99,7 @@ To avoid unnecessary costs, delete:
 - Any associated **resource groups** or **storage resources** -->
 
 <details>
-<summary><b>1️. Getting Started</b></summary>
+<summary><b>1️ Getting Started</b></summary>
 
 Azure **Virtual Machine Scale Sets (VMSS)** is a service that lets you deploy and manage a group of identical, load-balanced virtual machines.  
 It automatically scales the number of VM instances according to demand or based on rules you define.
@@ -117,7 +117,7 @@ A Scale Set includes:
 ---
 
 <details>
-<summary><b>2️. Create a Virtual Machine</b></summary>
+<summary><b>2️ Create a Virtual Machine</b></summary>
 
 In this task, we’ll create a base virtual machine that runs a **Node.js web app**.  
 Later, we’ll capture this VM as an image and use it as the base configuration for our scale set.
@@ -181,7 +181,7 @@ Visit `http://<public-ip>:3000` to see the **private IP address** displayed.
 ---
 
 <details>
-<summary><b>3️. Create a Custom Image (Equivalent of Launch Template)</b></summary>
+<summary><b>3️ Create a Custom Image (Equivalent of Launch Template)</b></summary>
 
 Now that our Node app runs successfully, we’ll capture this VM as a reusable image.  
 This image acts as the “Launch Template” for our Scale Set.
@@ -203,7 +203,7 @@ This image acts as the “Launch Template” for our Scale Set.
 ---
 
 <details>
-<summary><b>4️. Create a Virtual Machine Scale Set (Equivalent of Auto Scaling Group)</b></summary>
+<summary><b>4️ Create a Virtual Machine Scale Set (Equivalent of Auto Scaling Group)</b></summary>
 
 Now, we’ll create a **Virtual Machine Scale Set (VMSS)** using our captured image.
 
@@ -235,7 +235,7 @@ Now, we’ll create a **Virtual Machine Scale Set (VMSS)** using our captured im
 ---
 
 <details>
-<summary><b>5️. Verifying and Testing VMSS Behavior</b></summary>
+<summary><b>5️ Verifying and Testing VMSS Behavior</b></summary>
 
 We’ll now test how our VMSS behaves when:
 
@@ -264,7 +264,7 @@ sudo stress --cpu 4 --timeout 320
 ---
 
 <details>
-<summary><b>6️. Clean Up</b></summary>
+<summary><b>6️ Clean Up</b></summary>
 
 After completing the lab, remove all resources to avoid charges.
 
